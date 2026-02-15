@@ -1,0 +1,14 @@
+We want to build a small representation of a Garage in Java. This Garage should be able to
+store different types of Vehicles. Every Vehicle has a weight in kilograms (int). There are a
+few specific types of vehicles such as:
+• Cars, which also have a color.
+• Trucks, which have a load capacity in kilograms (int).
+• Electric Cars, which are a special type of Car and also have a battery capacity in
+kilowatt-hours (int).
+In the main method, we want to:
+1. Create an instance of the Garage.
+2. Add various kinds of vehicles to it.
+3. Print:
+o The total number of vehicles in the garage.
+o The number of Electric Cars specifically.
+
