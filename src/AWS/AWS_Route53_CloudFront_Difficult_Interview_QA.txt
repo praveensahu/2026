@@ -1,0 +1,132 @@
+AWS Route 53 and CloudFront Difficult Interview Questions and Answers
+Generated on: 2026-02-15 14:59:14
+
+============================================================ PART 1: AWS
+ROUTE 53 – ADVANCED QUESTIONS
+============================================================
+
+1)  How does Route 53 ensure high availability? Answer: Route 53 is a
+    globally distributed DNS service. It uses Anycast routing to direct
+    DNS queries to the nearest healthy DNS server. Health checks
+    continuously monitor endpoints and automatically reroute traffic if
+    a failure is detected.
+
+2)  Explain different routing policies and when to use them. Answer:
+
+-   Simple: Single resource, no health checks.
+-   Weighted: Split traffic based on assigned weights (useful for A/B
+    testing).
+-   Latency-based: Routes traffic to the lowest latency region.
+-   Failover: Active-passive setup using health checks.
+-   Geolocation: Routes based on user’s geographic location.
+-   Geoproximity: Routes based on user location with bias control.
+-   Multivalue Answer: Returns multiple healthy IPs.
+
+3)  Difference between Geolocation and Geoproximity routing? Answer:
+    Geolocation is strictly based on user location (continent/country).
+    Geoproximity allows bias adjustment to shift traffic toward a
+    specific region.
+
+4)  How do Route 53 health checks work internally? Answer: Route 53
+    health checks send HTTP/HTTPS/TCP requests from multiple global
+    locations. If the threshold of failed checks is crossed, the
+    endpoint is marked unhealthy.
+
+5)  Can Route 53 be used for private DNS? Answer: Yes. Using Private
+    Hosted Zones inside a VPC, Route 53 resolves internal domain names.
+
+6)  How does Route 53 support disaster recovery? Answer: Using failover
+    routing, health checks, and multi-region deployments with
+    active-active or active-passive configurations.
+
+============================================================ PART 2: AWS
+CLOUDFRONT – ADVANCED QUESTIONS
+============================================================
+
+7)  What is CloudFront and how does it work internally? Answer:
+    CloudFront is a CDN. It caches content at edge locations globally.
+    When a request comes:
+
+-   If cached → served from edge.
+-   If not cached → fetched from origin (S3, EC2, ALB, etc.), cached,
+    then returned.
+
+8)  What is Origin Shield? Answer: Origin Shield is an additional
+    caching layer that reduces load on origin by centralizing cache
+    misses through a regional shield location.
+
+9)  Explain CloudFront cache key. Answer: Cache key determines what
+    makes a request unique. It can include:
+
+-   URL path
+-   Query strings
+-   Headers
+-   Cookies
+
+Improper cache key configuration can reduce cache hit ratio.
+
+10) How do you invalidate CloudFront cache? Answer: Using invalidation
+    requests or versioned object naming (recommended).
+
+11) Difference between S3 static website endpoint and S3 REST endpoint
+    with CloudFront? Answer:
+
+-   Static website endpoint supports redirects and index documents.
+-   REST endpoint supports OAI/OAC for private access. Best practice:
+    Use REST endpoint + OAC.
+
+12) What is OAI vs OAC? Answer: OAI (Origin Access Identity) is legacy.
+    OAC (Origin Access Control) is modern and supports enhanced security
+    features.
+
+13) How does CloudFront protect against DDoS? Answer: Integrated with
+    AWS Shield (Standard by default) and AWS WAF for advanced filtering.
+
+14) Explain Lambda@Edge vs CloudFront Functions. Answer: Lambda@Edge:
+
+-   Runs at edge locations.
+-   Supports complex logic.
+-   Higher latency and cost.
+
+CloudFront Functions: - Lightweight. - Ultra-low latency. - Limited
+runtime capabilities.
+
+15) How would you design a low-latency global application using Route 53
+    and CloudFront? Answer:
+
+-   Use Route 53 latency-based routing across regions.
+-   Deploy app in multiple regions.
+-   Use CloudFront with multiple origins.
+-   Enable health checks and automatic failover.
+-   Use WAF and Shield for protection.
+
+============================================================
+SCENARIO-BASED QUESTIONS
+============================================================
+
+16) Users from India are getting high latency. How do you troubleshoot?
+    Answer:
+
+-   Check Route 53 routing policy.
+-   Verify CloudFront edge location usage.
+-   Check origin region distance.
+-   Analyze CloudFront cache hit ratio.
+-   Review network performance metrics.
+
+17) Your CloudFront cache hit ratio dropped suddenly. Possible reasons?
+    Answer:
+
+-   Cache key misconfiguration.
+-   Increased query string variability.
+-   Short TTL.
+-   Frequent invalidations.
+
+18) How would you secure private content in CloudFront? Answer:
+
+-   Use Signed URLs or Signed Cookies.
+-   Use OAC with S3.
+-   Restrict bucket policy.
+-   Enable HTTPS only.
+
+============================================================ END OF
+DOCUMENT ============================================================
