@@ -21,7 +21,7 @@ public class Practise16thFeb {
         String input = "apple banana kiwi orange fig strawberry";
         Arrays.stream(input.split("\\s")).max(Comparator.comparingInt(String::length).reversed()).get();
         List<Student> studentList = getStudentList();
-        studentList.stream().collect(Collectors.groupingBy(Student::getName,Collectors.averagingDouble(Student::getMarks)))
+        studentList.stream().collect(Collectors.groupingBy(Student::getName,Collectors.averagingDouble(Student::getMarks)));
 
     }
 
