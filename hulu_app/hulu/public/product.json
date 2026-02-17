@@ -1,0 +1,15 @@
+{
+  "title": "Apple iPhone 15",
+  "image": "/iphone.jpg",
+  "price": 69999,
+  "rating": {
+    "rate": 4.6,
+    "ratings": 12543,
+    "reviews": 2341
+  },
+  "offers": [
+    "10% instant discount on Axis Bank cards",
+    "No cost EMI available",
+    "Exchange up to ₹20,000 off"
+  ]
+}
