@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Architect-Level CDC + Binlog Deep Dive</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.7; background-color: #f4f7fb; }
+        h1, h2, h3 { color: #0b3d91; }
+        code { background-color: #eef2f7; padding: 4px 6px; border-radius: 4px; }
+        pre { background-color: #eef2f7; padding: 15px; border-radius: 8px; overflow-x: auto; }
+        .box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.06); margin-bottom: 30px; }
+        .qa { margin-bottom: 20px; }
+        .question { font-weight: bold; color: #1a237e; }
+        .answer { margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+<h1>Architect-Level CDC Design + Binlog Deep Dive</h1>
+
+<div class="box">
+<h2>High-Level CDC Flow</h2>
+
+<pre>
+Application
+    |
+    v
+Database (Commit)
+    |
+    v
+Binary Log (Row Events)
+    |
+    v
+Debezium Connector
+    |
+    v
+Kafka Topic (Per Table)
+    |
+    v
+Consumers / Sink Systems
+</pre>
+
+</div>
+
+<div class="box">
+<h2>Binlog Advanced Interview Questions & Answers</h2>
+
+<div class="qa">
+<div class="question">1. Why must binlog_format be ROW for Debezium?</div>
+<div class="answer">
+ROW format captures exact before/after row images. STATEMENT format does not capture actual row-level changes, making CDC unreliable and non-deterministic.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">2. What happens if binlog retention expires before Debezium reads it?</div>
+<div class="answer">
+Debezium loses the offset position and cannot resume streaming. You must re-snapshot the database. Proper binlog_expire_logs_seconds configuration is critical.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">3. How does Debezium maintain ordering?</div>
+<div class="answer">
+Ordering is preserved per partition. Since partitioning is based on primary key, ordering is guaranteed per key but not globally across all records.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">4. What is GTID and why is it important?</div>
+<div class="answer">
+GTID (Global Transaction ID) uniquely identifies transactions across replicas. It enables failover without losing binlog position during master switch.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">5. How do you handle large transactions in binlog?</div>
+<div class="answer">
+Tune max.batch.size and max.queue.size in Debezium. Large transactions may cause memory pressure and lag.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">6. How does Debezium handle schema changes?</div>
+<div class="answer">
+Schema changes are captured and stored in a schema history topic. Consumers using Schema Registry can adapt dynamically.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">7. What are common binlog failure scenarios?</div>
+<div class="answer">
+• Binlog corruption  
+• Disk full on DB server  
+• Purged logs before connector catch-up  
+• Server ID conflicts  
+• Replica lag causing inconsistent offsets
+</div>
+</div>
+
+<div class="qa">
+<div class="question">8. How to reduce CDC latency?</div>
+<div class="answer">
+• Reduce connector poll interval  
+• Increase Kafka partitions  
+• Optimize DB I/O  
+• Tune Debezium fetch size  
+• Use SSD for binlog storage
+</div>
+</div>
+
+<div class="qa">
+<div class="question">9. Can CDC guarantee exactly-once delivery?</div>
+<div class="answer">
+At-least-once by default. Exactly-once requires idempotent consumers and Kafka transactional producers.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">10. How do you scale CDC for 1000+ tables?</div>
+<div class="answer">
+• Use multiple connectors  
+• Table filtering  
+• Increase Kafka Connect cluster  
+• Dedicated topic naming strategy  
+• Monitor connector lag metrics
+</div>
+</div>
+
+</div>
+
+<div class="box">
+<h2>Production Architect Checklist</h2>
+
+<ul>
+<li>binlog_format=ROW</li>
+<li>binlog_row_image=FULL</li>
+<li>GTID enabled</li>
+<li>Kafka replication factor >= 3</li>
+<li>Distributed Kafka Connect mode</li>
+<li>DLQ configured</li>
+<li>Monitoring via Prometheus + Grafana</li>
+<li>Alerting on replication lag</li>
+</ul>
+
+</div>
+
+<div class="box">
+<h2>Final Architecture Summary</h2>
+<p>
+CDC = Reliable Streaming of Database Changes using Binlog → Debezium → Kafka → Event-Driven Systems.
+</p>
+</div>
+
+<h2>Architect-Level CDC + Binlog Deep Dive Ready 🚀</h2>
+
+</body>
+</html>
