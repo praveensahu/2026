@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>30 Architect Level SQL Questions & Answers</title>
+<style>
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(to right, #1e3c72, #2a5298);
+    margin: 0;
+    padding: 20px;
+    color: #fff;
+}
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+h1 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.card {
+    background: #ffffff;
+    color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+}
+.question {
+    font-weight: bold;
+    font-size: 18px;
+    color: #2a5298;
+}
+.answer {
+    margin-top: 10px;
+}
+code {
+    background: #f4f4f4;
+    padding: 8px;
+    display: block;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>30 Architect Level SQL Questions & Answers</h1>
+
+<!-- 1 -->
+<div class="card">
+<div class="question">1. What is the difference between WHERE and HAVING?</div>
+<div class="answer">
+WHERE filters rows before aggregation. HAVING filters after aggregation.
+<code>
+SELECT dept, COUNT(*) 
+FROM employees 
+WHERE salary > 50000 
+GROUP BY dept 
+HAVING COUNT(*) > 5;
+</code>
+</div>
+</div>
+
+<!-- 2 -->
+<div class="card">
+<div class="question">2. Explain different types of JOINs.</div>
+<div class="answer">
+INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL JOIN.
+<code>
+SELECT e.name, d.dept_name
+FROM emp e
+LEFT JOIN dept d ON e.dept_id = d.id;
+</code>
+</div>
+</div>
+
+<!-- 3 -->
+<div class="card">
+<div class="question">3. What is indexing and when should it be used?</div>
+<div class="answer">
+Indexes improve read performance but slow down writes.
+<code>
+CREATE INDEX idx_emp_salary ON emp(salary);
+</code>
+</div>
+</div>
+
+<!-- 4 -->
+<div class="card">
+<div class="question">4. Difference between clustered and non-clustered index?</div>
+<div class="answer">
+Clustered defines physical order (1 per table). Non-clustered is separate structure.
+</div>
+</div>
+
+<!-- 5 -->
+<div class="card">
+<div class="question">5. How to find duplicate records?</div>
+<div class="answer">
+<code>
+SELECT email, COUNT(*)
+FROM users
+GROUP BY email
+HAVING COUNT(*) > 1;
+</code>
+</div>
+</div>
+
+<!-- 6 -->
+<div class="card">
+<div class="question">6. How to delete duplicate records but keep one?</div>
+<div class="answer">
+<code>
+DELETE FROM users
+WHERE id NOT IN (
+   SELECT MIN(id)
+   FROM users
+   GROUP BY email
+);
+</code>
+</div>
+</div>
+
+<!-- 7 -->
+<div class="card">
+<div class="question">7. Explain normalization vs denormalization.</div>
+<div class="answer">
+Normalization reduces redundancy. Denormalization improves read performance.
+</div>
+</div>
+
+<!-- 8 -->
+<div class="card">
+<div class="question">8. What are window functions?</div>
+<div class="answer">
+Used for ranking, running totals.
+<code>
+SELECT name, salary,
+RANK() OVER (ORDER BY salary DESC) rnk
+FROM emp;
+</code>
+</div>
+</div>
+
+<!-- 9 -->
+<div class="card">
+<div class="question">9. Difference between ROW_NUMBER(), RANK(), DENSE_RANK()?</div>
+<div class="answer">
+ROW_NUMBER → unique numbers.  
+RANK → skips ranks.  
+DENSE_RANK → no gaps.
+</div>
+</div>
+
+<!-- 10 -->
+<div class="card">
+<div class="question">10. What is a CTE?</div>
+<div class="answer">
+Common Table Expression improves readability.
+<code>
+WITH high_salary AS (
+  SELECT * FROM emp WHERE salary > 100000
+)
+SELECT * FROM high_salary;
+</code>
+</div>
+</div>
+
+<!-- 11 -->
+<div class="card">
+<div class="question">11. How to optimize slow queries?</div>
+<div class="answer">
+Use indexes, EXPLAIN plan, avoid SELECT *, partitioning.
+</div>
+</div>
+
+<!-- 12 -->
+<div class="card">
+<div class="question">12. What is EXPLAIN plan?</div>
+<div class="answer">
+Shows query execution strategy.
+<code>
+EXPLAIN SELECT * FROM emp WHERE salary > 50000;
+</code>
+</div>
+</div>
+
+<!-- 13 -->
+<div class="card">
+<div class="question">13. ACID properties?</div>
+<div class="answer">
+Atomicity, Consistency, Isolation, Durability.
+</div>
+</div>
+
+<!-- 14 -->
+<div class="card">
+<div class="question">14. Isolation levels?</div>
+<div class="answer">
+Read Uncommitted, Read Committed, Repeatable Read, Serializable.
+</div>
+</div>
+
+<!-- 15 -->
+<div class="card">
+<div class="question">15. What is deadlock?</div>
+<div class="answer">
+Two transactions waiting on each other’s locks.
+</div>
+</div>
+
+<!-- 16 -->
+<div class="card">
+<div class="question">16. Difference between TRUNCATE and DELETE?</div>
+<div class="answer">
+DELETE logs row-level. TRUNCATE deallocates pages (faster).
+</div>
+</div>
+
+<!-- 17 -->
+<div class="card">
+<div class="question">17. What is partitioning?</div>
+<div class="answer">
+Splits large tables into smaller pieces.
+</div>
+</div>
+
+<!-- 18 -->
+<div class="card">
+<div class="question">18. How to implement pagination?</div>
+<div class="answer">
+<code>
+SELECT * FROM emp
+ORDER BY id
+LIMIT 10 OFFSET 20;
+</code>
+</div>
+</div>
+
+<!-- 19 -->
+<div class="card">
+<div class="question">19. What is materialized view?</div>
+<div class="answer">
+Precomputed stored result for performance.
+</div>
+</div>
+
+<!-- 20 -->
+<div class="card">
+<div class="question">20. Find second highest salary?</div>
+<div class="answer">
+<code>
+SELECT MAX(salary)
+FROM emp
+WHERE salary < (SELECT MAX(salary) FROM emp);
+</code>
+</div>
+</div>
+
+<!-- 21 -->
+<div class="card">
+<div class="question">21. How to handle large data migrations?</div>
+<div class="answer">
+Use batching, disable indexes temporarily, validate consistency.
+</div>
+</div>
+
+<!-- 22 -->
+<div class="card">
+<div class="question">22. What is sharding?</div>
+<div class="answer">
+Horizontal data partition across multiple databases.
+</div>
+</div>
+
+<!-- 23 -->
+<div class="card">
+<div class="question">23. Difference between OLTP and OLAP?</div>
+<div class="answer">
+OLTP → transactional. OLAP → analytics.
+</div>
+</div>
+
+<!-- 24 -->
+<div class="card">
+<div class="question">24. How to design for high availability?</div>
+<div class="answer">
+Replication, failover clustering, read replicas.
+</div>
+</div>
+
+<!-- 25 -->
+<div class="card">
+<div class="question">25. What is covering index?</div>
+<div class="answer">
+Index that satisfies query without table lookup.
+</div>
+</div>
+
+<!-- 26 -->
+<div class="card">
+<div class="question">26. How to detect unused indexes?</div>
+<div class="answer">
+Use system DMV tables or performance schema.
+</div>
+</div>
+
+<!-- 27 -->
+<div class="card">
+<div class="question">27. What is CAP theorem?</div>
+<div class="answer">
+Consistency, Availability, Partition Tolerance.
+</div>
+</div>
+
+<!-- 28 -->
+<div class="card">
+<div class="question">28. How to prevent SQL injection?</div>
+<div class="answer">
+Use prepared statements.
+</div>
+</div>
+
+<!-- 29 -->
+<div class="card">
+<div class="question">29. What are composite indexes?</div>
+<div class="answer">
+Index on multiple columns.
+<code>
+CREATE INDEX idx_name_dept ON emp(name, dept_id);
+</code>
+</div>
+</div>
+
+<!-- 30 -->
+<div class="card">
+<div class="question">30. How to monitor database performance?</div>
+<div class="answer">
+Use monitoring tools, slow query logs, APM solutions.
+</div>
+</div>
+
+</div>
+</body>
+</html>
