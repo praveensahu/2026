@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Route 53 – 30 architect Q&A</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f2f5f9;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .main-card {
+            max-width: 1300px;
+            width: 100%;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            overflow: hidden;
+            padding: 2.5rem 2.2rem;
+            border: 1px solid #e9edf4;
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(145deg, #1d2b3f, #0f1a2c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.02em;
+            border-left: 6px solid #FF9900;
+            padding-left: 1.3rem;
+        }
+        .subhead {
+            font-size: 1.2rem;
+            color: #3a4b60;
+            margin-bottom: 2.5rem;
+            margin-top: 0.3rem;
+            font-weight: 400;
+            padding-left: 2rem;
+            border-bottom: 1px dashed #cbd5e1;
+            padding-bottom: 0.8rem;
+        }
+        .stats {
+            display: flex;
+            gap: 2rem;
+            background: #f0f4fa;
+            border-radius: 60px;
+            padding: 0.5rem 1.8rem;
+            width: fit-content;
+            margin-bottom: 2.2rem;
+            font-weight: 500;
+            color: #1e293b;
+            font-size: 0.95rem;
+            border: 1px solid #dde3ec;
+        }
+        .qna-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        .q-item {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid #dee5ed;
+            transition: all 0.15s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .q-item:hover {
+            border-color: #b1c3db;
+            box-shadow: 0 8px 18px -8px rgba(0,20,60,0.12);
+        }
+        .q {
+            background: #f9fcff;
+            padding: 1.2rem 1.8rem;
+            font-weight: 600;
+            font-size: 1.12rem;
+            color: #0e1f38;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #e2e9f2;
+        }
+        .q-num {
+            display: inline-flex;
+            background: #FF9900;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 30px;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 3px 7px rgba(255,153,0,0.3);
+            flex-shrink: 0;
+        }
+        .q-text {
+            line-height: 1.5;
+        }
+        .a {
+            padding: 1.2rem 1.8rem 1.4rem 1.8rem;
+            color: #1f2c40;
+            font-size: 1.02rem;
+            background: #ffffff;
+            border-radius: 0 0 20px 20px;
+        }
+        .a p {
+            margin-top: 0;
+            margin-bottom: 0.7rem;
+            line-height: 1.6;
+        }
+        .a p:last-child {
+            margin-bottom: 0;
+        }
+        .code-frag {
+            background: #1a2634;
+            color: #e2e9f2;
+            padding: 0.7rem 1.2rem;
+            border-radius: 14px;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            margin: 0.8rem 0 0.3rem;
+            border-left: 4px solid #FF9900;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .tag {
+            background: #e6edf6;
+            color: #214973;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: inline-block;
+            margin-right: 0.6rem;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #d0dcec;
+            margin: 1.8rem 0 1rem;
+        }
+        .footer-note {
+            margin-top: 2.2rem;
+            font-size: 0.95rem;
+            color: #4e627c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #ced9e8;
+            padding-top: 1.5rem;
+        }
+        .copy-badge {
+            background: #e3e9f3;
+            padding: 0.2rem 1rem;
+            border-radius: 30px;
+            color: #1b2b40;
+            font-weight: 500;
+        }
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .main-card { padding: 1.8rem 1.2rem; }
+            h1 { font-size: 1.9rem; }
+            .q { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="main-card">
+    <h1>☁️ Route 53 · architect brief</h1>
+    <div class="subhead">30 advanced questions & answers — DNS, routing, health checks & hybrid</div>
+    <div class="stats">
+        <span>📐 30 architect-level</span>
+        <span>⚡ latency / geolocation / failover</span>
+        <span>🧩 2025 edition</span>
+    </div>
+
+    <div class="qna-grid">
+        <!-- question 1 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">1</span><span class="q-text">How does Route 53 resolver work in a hybrid environment with on-premises and VPC? Explain the role of inbound/outbound endpoints.</span></div>
+            <div class="a"><p><span class="tag">hybrid-dns</span> Inbound endpoint: on-prem DNS forwarders can query Route 53 Resolver to resolve private hosted zones (VPC). Outbound endpoint: Route 53 Resolver forwards queries from VPC to on‑prem DNS servers via rules. This enables split‑horizon DNS and conditional forwarding without exposing internal networks.</p></div>
+        </div>
+        <!-- 2 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">2</span><span class="q-text">Explain the difference between simple routing, weighted routing, and latency-based routing. When would you choose latency over geoproximity?</span></div>
+            <div class="a"><p><span class="tag">routing-policies</span> Simple: single record, one destination (or multiple returned randomly). Weighted: distribute % traffic across resources. Latency: route to lowest latency region (based on AWS edge measurements). Geoproximity (traffic flow) uses location + bias to expand/shrink influence. Choose latency when user experience depends on speed; geoproximity when you need to keep traffic within specific geographic boundaries (licensing, regulations).</p></div>
+        </div>
+        <!-- 3 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">3</span><span class="q-text">What is a Route 53 health check? How does it evaluate endpoint health and how can you integrate it with CloudWatch?</span></div>
+            <div class="a"><p><span class="tag">health-check</span> Health checks monitor endpoint via HTTP/HTTPS/TCP, or check CloudWatch alarms, or other health checks (calculated). They support string matching, fast intervals (10s), and trigger failover routing. Integration: health check failures can publish to CloudWatch metrics (e.g., HealthCheckStatus) and trigger SNS alerts. Combined with CloudWatch alarms, you can automate remediation.</p></div>
+        </div>
+        <!-- 4 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">4</span><span class="q-text">Design a multi-region active-passive architecture with Route 53. How does failover routing work with primary and secondary resources?</span></div>
+            <div class="a"><p><span class="tag">failover</span> Create two records with same name, one primary (failover type PRIMARY) and one secondary (SECONDARY). Associate health checks with primary. If health check fails, Route 53 returns the secondary record. For deeper resilience, use associated health checks for each endpoint and set "Evaluate Target Health" on alias records. Recommended: use weighted 0/100 during failover tests.</p></div>
+        </div>
+        <!-- 5 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">5</span><span class="q-text">What is an alias record and why is it fundamentally different from a CNAME? Provide three use cases where alias is mandatory.</span></div>
+            <div class="a"><p><span class="tag">alias-vs-cname</span> Alias record is Route 53‑specific, works like CNAME but can point to AWS resources (CloudFront, ELB, S3 bucket) even for apex (naked) domain. It is free, and resolves via AWS internal mapping with no extra TTL limitations. Mandatory: 1) apex domain to ELB/CloudFront 2) record within same hosted zone to another record (e.g., weighted alias) 3) pointing to S3 website endpoint that has a different hosted zone.</p></div>
+        </div>
+        <!-- 6 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">6</span><span class="q-text">Explain how Resolver DNS Firewall works and how you can block malicious domains at the VPC level.</span></div>
+            <div class="a"><p><span class="tag">security</span> Route 53 Resolver DNS Firewall allows you to create rule groups (allow/block lists) using domains. Attach to VPC. It inspects outbound DNS queries from VPC resources and blocks/ alerts based on rules. Integrates with AWS Firewall Manager to deploy centrally. It helps prevent C2 callbacks, malware communication.</p></div>
+        </div>
+        <!-- 7 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">7</span><span class="q-text">You have a web app deployed on multiple EC2 instances in different regions. How would you use latency-based routing with health checks to ensure only healthy endpoints receive traffic?</span></div>
+            <div class="a"><p><span class="tag">latency+health</span> Create latency record for each region (e.g., two records with same name, latency policy, region us‑east‑1 and eu‑west‑1). Under each record, enable "Evaluate Target Health" and associate a health check per region endpoint (or for the load balancer). If a region’s endpoint fails health checks, Route 53 removes that record from the latency rotation. Traffic then flows only to the healthy region with lowest latency.</p></div>
+        </div>
+        <!-- 8 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">8</span><span class="q-text">What is a Route 53 traffic flow policy and how does it help with global traffic management? Give an example of a geoproximity policy with a bias.</span></div>
+            <div class="a"><p><span class="tag">traffic-flow</span> Traffic flow is a visual editor to create complex routing combinations (geoproximity, weighted, failover). You create a policy, version it, and attach to a record. Example: geoproximity with two endpoints, us‑west‑1 bias +50 to attract more traffic (even from Europe) unless latency is high. It's powerful for fine‑grained traffic shaping.</p></div>
+        </div>
+        <!-- 9 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">9</span><span class="q-text">How does Route 53 privatelink integration work for resolving on-premise to private hosted zones? Describe the role of shared zones and VPC associations.</span></div>
+            <div class="a"><p><span class="tag">privatelink</span> Private hosted zones can be associated with VPCs via AWS RAM (Resource Access Manager). For on‑prem, you set up Route 53 Resolver inbound endpoint in the VPC. On‑prem DNS forwarders send queries to the inbound endpoint IP, which resolves against the private zone. No need to expose internal DNS records publicly.</p></div>
+        </div>
+        <!-- 10 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">10</span><span class="q-text">Explain DNSSEC for Route 53. How do you enable it for a domain registered with Route 53 and why is it critical for security?</span></div>
+            <div class="a"><p><span class="tag">dnssec</span> DNSSEC adds digital signatures to DNS records, ensuring authenticity and integrity. In Route 53, you enable DNSSEC signing in the hosted zone, create a key-signing key (KSK) using KMS. Then you must add the DS record to the parent zone (e.g., registrar). For .com domains registered with Route 53, you can upload the DS via Route 53 console. Prevents cache poisoning / man‑in‑the‑middle.</p></div>
+        </div>
+        <!-- 11 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">11</span><span class="q-text">What is the difference between a simple routing policy with multiple values and a multivalue answer routing policy? When to use multivalue?</span></div>
+            <div class="a"><p><span class="tag">multivalue</span> Simple with multiple values returns all IPs in random order; health checks are not considered. Multivalue answer routing lets you attach a health check to each resource record and returns up to 8 healthy records randomly. It acts as basic load balancing with health checks, but without weighting or latency awareness. Use for small-scale redundancy without a load balancer.</p></div>
+        </div>
+        <!-- 12 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">12</span><span class="q-text">You need to migrate a domain from a third‑party registrar to Route 53 with zero downtime. Outline the step‑by‑step process.</span></div>
+            <div class="a"><p><span class="tag">migration</span> 1) Create a hosted zone in Route 53 with the domain name. 2) Import existing DNS records (or migrate manually). 3) Update the nameserver (NS) records in the current registrar to the four Route 53 NS addresses – but keep old DNS servers live for propagation. 4) Wait for TTL to expire and verify resolution. 5) Transfer domain registration to Route 53 (optional) after 60 days lock if needed. Keep both zones until TTL fully passed.</p></div>
+        </div>
+        <!-- 13 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">13</span><span class="q-text">Explain the concept of "split-view" or "split-horizon" DNS using Route 53 private and public hosted zones with the same domain.</span></div>
+            <div class="a"><p><span class="tag">split-view</span> Create a public hosted zone for example.com and a private hosted zone for example.com associated with your VPC. VPC resources resolve using the private zone (internal IPs), while external queries use the public zone. This allows internal services to use same domain but resolve privately. Important: private zone must have same domain name, and VPC enableDnsHostnames & enableDnsSupport must be true.</p></div>
+        </div>
+        <!-- 14 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">14</span><span class="q-text">How can you monitor DNS query latency and volume per record? What metrics does Route 53 publish to CloudWatch?</span></div>
+            <div class="a"><p><span class="tag">monitoring</span> Route 53 publishes DNS query volume metrics (DNSQueries) per hosted zone to CloudWatch (metric resolution: 5 minutes). For latency, you can use AWS’s Internet Monitor or configure health checks to measure time to connect. There is no per‑record latency metric natively, but you can enable query logging to capture resolver logs and analyze latency using third‑party tools.</p></div>
+        </div>
+        <!-- 15 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">15</span><span class="q-text">What is a Route 53 Resolver rule and how does it differ from forwarding rule? Describe the difference between system rules and custom rules.</span></div>
+            <div class="a"><p><span class="tag">resolver-rules</span> Resolver rules control how DNS queries are forwarded. System rules are automatically created for default VPC resolution. Custom rules define conditional forwarding (e.g., forward corporate.domain to on‑prem DNS). Outbound endpoint uses rules to forward queries. Inbound endpoint does not need rules; it listens.</p></div>
+        </div>
+        <!-- 16 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">16</span><span class="q-text">Design a blue/green deployment using weighted routing. How would you gradually shift traffic from blue to green with the ability to rollback instantly?</span></div>
+            <div class="a"><p><span class="tag">blue-green</span> Create two weighted A records for same name: blue weight 100, green weight 0. After deploying green stack, change weights gradually (e.g., blue 90, green 10; blue 50, green 50; blue 0, green 100). Use weight 0 to keep record but without traffic. Health checks on both. Rollback is simply reverting weights. TTL should be low (60s) for fast propagation.</p></div>
+        </div>
+        <!-- 17 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">17</span><span class="q-text">How does Route 53 handle geoproximity routing? What underlying data determines user location? Can you shift traffic using bias?</span></div>
+            <div class="a"><p><span class="tag">geoproximity</span> Geoproximity uses the geographic location of users (from their resolver IP) and resources. You can set a bias to expand or shrink the region from which traffic is directed to a resource. Bias range: -99 to +99. Positive bias attracts more traffic. It uses the Route 53 traffic flow policy and is configured via the visual editor or JSON.</p></div>
+        </div>
+        <!-- 18 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">18</span><span class="q-text">What is the maximum TTL you can set for an alias record? Why would you choose a lower TTL for failover scenarios?</span></div>
+            <div class="a"><p><span class="tag">ttl</span> Alias records inherit TTL from the underlying AWS resource (cannot be set manually, it's usually 60s). For non‑alias records you can set TTL between 0 and 172800 seconds. Lower TTL (e.g., 60) is crucial for failover to speed up recovery, but increases query volume. Higher TTL reduces cost and latency but delays failover.</p></div>
+        </div>
+        <!-- 19 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">19</span><span class="q-text">Explain how Route 53 can be used to route traffic to an on-premises data center via a VPN or Direct Connect, with active-active setup.</span></div>
+            <div class="a"><p><span class="tag">hybrid-routing</span> You can create health checks for on‑prem endpoints via public IP, but better: use Route 53 Resolver and internal endpoints. For active‑active, assign weighted records pointing to your on‑prem IPs (via public hosted zone) or private IPs using private hosted zone (if accessible via VPN). Combine with latency or geoproximity based on user location. Ensure health checks monitor your on‑prem load balancer.</p></div>
+        </div>
+        <!-- 20 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">20</span><span class="q-text">What is a "health check – calculated" and how can it combine multiple child health checks? Provide an architecture where you need an OR condition.</span></div>
+            <div class="a"><p><span class="tag">calculated-hc</span> A calculated health check monitors the status of other health checks. You specify how many need to pass: e.g., 2 out of 3. It can also create OR logic: monitor three endpoints, if at least one is healthy, the calculated check passes. Useful for failover scenarios where you have multiple mirrors and any one can serve traffic.</p></div>
+        </div>
+        <!-- 21 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">21</span><span class="q-text">How do you use Route 53 to implement a "domain allow list" for API access? Can you restrict access based on source domain?</span></div>
+            <div class="a"><p><span class="tag">security</span> While Route 53 itself does not filter incoming requests, you can combine with AWS WAF on CloudFront or ALB that inspects the Host header. For outbound filtering, use Route 53 Resolver DNS Firewall. To restrict API access based on domain, use API Gateway with WAF rules to inspect the Origin or Referer header.</p></div>
+        </div>
+        <!-- 22 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">22</span><span class="q-text">Explain the concept of "Domain registration" vs "Hosted Zone" in Route 53. Can you have a hosted zone without registering the domain through Route 53?</span></div>
+            <div class="a"><p><span class="tag">basics</span> Domain registration is buying the name (registrar). Hosted zone is the DNS container for records. Yes, you can create a hosted zone for any domain you own, regardless of registrar. Then update the domain's NS records at your current registrar to point to Route 53 name servers.</p></div>
+        </div>
+        <!-- 23 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">23</span><span class="q-text">How does Route 53 handle wildcard records? What are the precedence rules when both an exact record and wildcard exist?</span></div>
+            <div class="a"><p><span class="tag">wildcard</span> Wildcard (*.example.com) resolves any subdomain not explicitly defined. Exact match (e.g., api.example.com) takes precedence. Route 53 supports wildcards only for the leftmost label. For overlapping records, the most specific match is returned. Note: wildcard records cannot be used with some routing policies (e.g., latency) unless they point to alias.</p></div>
+        </div>
+        <!-- 24 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">24</span><span class="q-text">What is the purpose of the "associate VPC" setting in private hosted zones? Can you associate a private hosted zone with multiple VPCs in different regions?</span></div>
+            <div class="a"><p><span class="tag">vpc-association</span> Yes, you can associate a private hosted zone with multiple VPCs (up to 100) in any region, as long as the VPCs are in the same AWS account or shared via RAM. After association, all instances in those VPCs resolve the private zone records. The VPC must have DNS resolution enabled.</p></div>
+        </div>
+        <!-- 25 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">25</span><span class="q-text">Describe how you would use Route 53 with an internet-facing Network Load Balancer (NLB) for static IP per AZ. What type of record?</span></div>
+            <div class="a"><p><span class="tag">nlb</span> Use alias records to point to the NLB (regional). For static IP per AZ, you can create a record for each AZ's NLB endpoint (using the NLB's per‑AZ IP). Or use a multi‑value answer with those IPs. Simpler: alias to NLB DNS name, but for fixed IP use A records with the elastic IPs attached to the NLB (requires instance or BYOIP).</p></div>
+        </div>
+        <!-- 26 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">26</span><span class="q-text">How does Route 53 handle IPv6 addresses (AAAA records) and dualstack routing? Can you return both A and AAAA?</span></div>
+            <div class="a"><p><span class="tag">ipv6</span> Yes, Route 53 supports AAAA records. You can create separate records for A and AAAA. When a client queries for AAAA, they get the IPv6 record. If you want both types, the client typically makes separate requests. If you need dualstack with the same routing policy, you create two records (A and AAAA) with identical routing configurations.</p></div>
+        </div>
+        <!-- 27 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">27</span><span class="q-text">Explain "DNS query logging" in Route 53. What data is logged, and how can you use Athena to analyze it?</span></div>
+            <div class="a"><p><span class="tag">logging</span> DNS query logging sends logs to CloudWatch Logs or S3 (via CloudWatch subscription). Logs contain query timestamp, domain, edge location, instance ID (if using private zone), and response. You can analyze with Amazon Athena by setting up a table over S3 logs and running SQL queries to see top queried domains, failures, or latency patterns.</p></div>
+        </div>
+        <!-- 28 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">28</span><span class="q-text">What are the limits of Route 53 (max hosted zones, records per zone, etc.)? How can you request an increase?</span></div>
+            <div class="a"><p><span class="tag">limits</span> Default: 500 hosted zones per account; 10,000 records per zone (but 20,000 for private zones with multiple VPCs). You can increase soft limits via AWS Support (service quotas). Also, max 100 health checks per account (default) – can be raised. For alias records, no extra limit.</p></div>
+        </div>
+        <!-- 29 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">29</span><span class="q-text">Design a disaster recovery solution using Route 53 with warm standby: one region primary, second region on minimal capacity. How to failover?</span></div>
+            <div class="a"><p><span class="tag">dr</span> Use failover routing. Primary region alias to primary load balancer with health check. Secondary region alias with secondary resources. In normal state, primary responds. Health check on primary region endpoints; on failure, Route 53 automatically returns secondary. Ensure secondary region is provisioned with minimal compute (warm standby) and can scale quickly. Combine with automation to scale up on failover.</p></div>
+        </div>
+        <!-- 30 -->
+        <div class="q-item">
+            <div class="q"><span class="q-num">30</span><span class="q-text">What is the difference between a simple and a weighted alias record pointing to the same load balancer? How does weight affect alias target?</span></div>
+            <div class="a"><p><span class="tag">weighted-alias</span> Alias records can have weights. For example, two alias records with weight 50/50 both pointing to the same ELB (or different ELBs). Route 53 returns the ELB DNS name accordingly. Weight is relative; if you set weight 0 it is not returned. Simple alias just returns the ELB address without any distribution. Weighted alias helps gradual migration between different ELB versions.</p></div>
+        </div>
+    </div>
+    <hr>
+    <div class="footer-note">
+        <span>📘 30 architect Q&A — Route 53 deep dive</span>
+        <span class="copy-badge">⏵ ready for copy/paste · layout safe ⏴</span>
+    </div>
+</div>
+</body>
+</html>

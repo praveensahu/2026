@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Apache Kafka – 30 Architect Level Interview Q&A</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+            background-color: #f4f6f9;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        .qa {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+        }
+        .question {
+            font-weight: bold;
+            color: #1a5276;
+        }
+        .answer {
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Apache Kafka – Architect Level Interview Q&A</h1>
+
+<div class="qa">
+<div class="question">1. What is Apache Kafka and where should it be used?</div>
+<div class="answer">
+Apache Kafka is a distributed event streaming platform designed for high-throughput, fault-tolerant, and scalable messaging. It is ideal for event-driven architectures, log aggregation, stream processing, and real-time analytics pipelines.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">2. Explain Kafka architecture at a high level.</div>
+<div class="answer">
+Kafka consists of Producers, Brokers, Topics, Partitions, Consumers, Consumer Groups, and a metadata quorum managed by KRaft (or ZooKeeper in older versions). Data is written to partitions and replicated across brokers.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">3. How does partitioning impact scalability?</div>
+<div class="answer">
+Partitions allow horizontal scaling. Each partition can be processed independently. Increasing partitions increases parallelism but impacts ordering guarantees.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">4. What are ISR and Leader-Follower replication?</div>
+<div class="answer">
+ISR (In-Sync Replicas) are replicas fully caught up with the leader. Only ISR members can become leaders, ensuring data durability.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">5. How do you ensure exactly-once semantics?</div>
+<div class="answer">
+Use idempotent producers and transactional APIs. Configure enable.idempotence=true and use transactional.id for atomic writes across partitions.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">6. How do you handle schema evolution?</div>
+<div class="answer">
+Use Schema Registry (e.g., Confluent Schema Registry) with Avro/Protobuf. Maintain backward/forward compatibility rules.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">7. What is the role of KRaft?</div>
+<div class="answer">
+KRaft replaces ZooKeeper for metadata management, simplifying architecture and improving scalability.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">8. How do you design Kafka for multi-region deployment?</div>
+<div class="answer">
+Use MirrorMaker 2 or Cluster Linking for replication across regions. Design for eventual consistency and handle latency tradeoffs.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">9. What is log compaction?</div>
+<div class="answer">
+Log compaction retains only the latest record per key. Useful for change-data-capture and state reconstruction.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">10. How do you tune Kafka for high throughput?</div>
+<div class="answer">
+Increase batch.size, linger.ms, compression, optimize acks, and use appropriate partition counts. Tune OS page cache and disk I/O.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">11. Explain consumer rebalancing.</div>
+<div class="answer">
+Rebalancing occurs when consumer group membership changes. Partitions are reassigned, which may cause temporary pause in processing.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">12. What is backpressure and how is it handled?</div>
+<div class="answer">
+Backpressure happens when consumers are slower than producers. Manage using retention policies, scaling consumers, or throttling producers.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">13. How do you secure Kafka?</div>
+<div class="answer">
+Use TLS for encryption, SASL for authentication, and ACLs for authorization.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">14. How do you monitor Kafka?</div>
+<div class="answer">
+Monitor broker metrics (under-replicated partitions, request latency), consumer lag, disk usage, and JVM metrics via JMX + Prometheus + Grafana.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">15. What causes consumer lag?</div>
+<div class="answer">
+Slow processing, insufficient partitions, network delays, or inefficient deserialization can cause lag.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">16. How do you achieve ordering guarantees?</div>
+<div class="answer">
+Ordering is guaranteed only within a partition. Use proper key-based partitioning.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">17. What is the difference between retention and compaction?</div>
+<div class="answer">
+Retention deletes messages after a time/size limit. Compaction keeps only the latest record per key.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">18. How do you handle large messages?</div>
+<div class="answer">
+Avoid large messages. Use object storage (S3) and send references. Tune message.max.bytes if necessary.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">19. How do you design for 1M messages/sec?</div>
+<div class="answer">
+Increase partitions, use compression, scale brokers horizontally, use NVMe disks, and tune network throughput.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">20. What is Kafka Streams?</div>
+<div class="answer">
+Kafka Streams is a client library for stream processing directly on Kafka topics with stateful processing.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">21. How does Kafka ensure durability?</div>
+<div class="answer">
+Replication factor and acks=all ensure data is written to multiple brokers before acknowledgment.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">22. What is min.insync.replicas?</div>
+<div class="answer">
+Minimum number of ISR required for successful write when acks=all. Prevents data loss.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">23. How do you avoid data loss?</div>
+<div class="answer">
+Use replication factor >=3, acks=all, min.insync.replicas>=2, and idempotent producers.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">24. How does Kafka handle failures?</div>
+<div class="answer">
+If leader fails, a new leader is elected from ISR automatically.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">25. What is rack awareness?</div>
+<div class="answer">
+Kafka distributes replicas across racks to avoid single rack failure data loss.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">26. What are common production issues?</div>
+<div class="answer">
+Under-replicated partitions, disk full, GC pauses, high consumer lag.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">27. When should Kafka NOT be used?</div>
+<div class="answer">
+Low-latency RPC systems, simple queue requirements, or small-scale systems may not need Kafka complexity.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">28. Explain Kafka Connect.</div>
+<div class="answer">
+Kafka Connect integrates Kafka with external systems like databases, S3, Elasticsearch using source/sink connectors.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">29. How do you design retry and DLQ strategy?</div>
+<div class="answer">
+Use retry topics with exponential backoff and a Dead Letter Queue topic for failed records.
+</div>
+</div>
+
+<div class="qa">
+<div class="question">30. How do you design event-driven microservices using Kafka?</div>
+<div class="answer">
+Use Kafka as event backbone, implement idempotent consumers, schema governance, monitoring, and contract-based event design.
+</div>
+</div>
+
+</body>
+</html>
